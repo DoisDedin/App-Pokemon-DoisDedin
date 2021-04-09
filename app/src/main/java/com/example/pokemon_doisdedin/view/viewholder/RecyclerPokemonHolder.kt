@@ -35,7 +35,7 @@ class RecyclerPokemonHolder(view: View) : RecyclerView.ViewHolder(view) {
         Picasso.get().load(urlImage)
             .into(image_pokemon, object : Callback {
                 override fun onSuccess() {
-
+                    val s = ""
                     setLayout(1)
                 }
 
