@@ -30,12 +30,14 @@ class RecyclerPokemonHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bind(pokemon: PokemonResultModel, listener: RecyclerPokemonListener) {
         setLayout(0)
         name_pokemon.text = pokemon.name
+        val s = ""
+        val y = ""
         var urlImage = "$baseUrl${pokemon.id.toString()}.png"
         //fazer a atribuição da imagem corretamente image_pokemon.setImageResource(R.drawable.androidzinho_grey)
         Picasso.get().load(urlImage)
             .into(image_pokemon, object : Callback {
                 override fun onSuccess() {
-                    val s = ""
+
                     setLayout(1)
                 }
 
