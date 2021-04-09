@@ -22,7 +22,7 @@ import java.lang.Exception
 import kotlin.coroutines.coroutineContext
 
 class RecyclerPokemonHolder(view: View) : RecyclerView.ViewHolder(view) {
-    private val baseUrl: String = "https://pokeres.bastionbot.org/images/pokemon/"
+
     private val name_pokemon: TextView = view.findViewById(R.id.name_pokemon)
     private val image_pokemon: ImageView = view.findViewById(R.id.image_pokemon)
     private val lottie: LottieAnimationView = view.findViewById(R.id.lottie)
@@ -32,12 +32,11 @@ class RecyclerPokemonHolder(view: View) : RecyclerView.ViewHolder(view) {
         name_pokemon.text = pokemon.name
         val s = ""
         val y = ""
-        var urlImage = "$baseUrl${pokemon.id.toString()}.png"
+        var urlImage =
         //fazer a atribuição da imagem corretamente image_pokemon.setImageResource(R.drawable.androidzinho_grey)
-        Picasso.get().load(urlImage)
+        Picasso.get().load(pokemon.image)
             .into(image_pokemon, object : Callback {
                 override fun onSuccess() {
-
                     setLayout(1)
                 }
 

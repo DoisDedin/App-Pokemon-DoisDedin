@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.coroutineContext
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
+    private val baseUrl: String = "https://pokeres.bastionbot.org/images/pokemon/"
     var mListPokemon = MutableLiveData<ArrayList<PokemonResultModel>>()
     var mKeepLoad = MutableLiveData<Boolean>()
     var mListPokemonAux = ArrayList<PokemonResultModel>()
@@ -28,14 +29,14 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     fun getPokemons(size: Int) {
         //do when mutable a variable //responsible when load first in application
         GlobalScope.launch {
-            delay(2000)
+            delay(4000)
             mKeepLoad.postValue(false)
         }
         var defaultPokemon = PokemonResultModel()
-        for (x in 1..50) {
-
+        for (x in 600..650) {
             mPokemonRepository.pokemon(x.toString(), object : APIListener<PokemonResultModel> {
                 override fun onSuccess(mode: PokemonResultModel) {
+                    mode.image = "$baseUrl${mode.id.toString()}.png"
                     mListPokemonAux.add(mode)
                     mListPokemon.value = mListPokemonAux
                 }
@@ -47,6 +48,5 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             })
         }
     }
-
 
 }
