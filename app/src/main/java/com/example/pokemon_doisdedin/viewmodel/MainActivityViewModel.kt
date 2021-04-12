@@ -6,18 +6,22 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.pokemon_doisdedin.R
 import com.example.pokemon_doisdedin.model.PokemonModel
 import com.example.pokemon_doisdedin.services.listener.APIListener
 import com.example.pokemon_doisdedin.services.model.PokemonResultModel
 import com.example.pokemon_doisdedin.services.repository.PokemonRepository
+import com.example.pokemon_doisdedin.services.room.dao.PokemonsDataBase
 import kotlinx.coroutines.Delay
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.coroutineContext
 
-class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
+class MainActivityViewModel(
+    var dataBase: PokemonsDataBase
+    ) : ViewModel() {
     private val baseUrl: String = "https://pokeres.bastionbot.org/images/pokemon/"
     var mListPokemon = MutableLiveData<ArrayList<PokemonResultModel>>()
     var mKeepLoad = MutableLiveData<Boolean>()

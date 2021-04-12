@@ -14,10 +14,12 @@ import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
 import com.example.pokemon_doisdedin.view.viewadapter.RecyclerPokemonAdapter
 import com.example.pokemon_doisdedin.viewmodel.MainActivityViewModel
 import kotlinx.coroutines.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mViewModel: MainActivityViewModel
+    private val mViewModel by viewModel<MainActivityViewModel>()
     private lateinit var mListenerRecyclerPokemon: RecyclerPokemonListener
     private lateinit var mRecyclerPokemonAdapter: RecyclerPokemonAdapter
     var lottieRecycler: LottieAnimationView? = null
@@ -27,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         mRecyclerPokemonAdapter = RecyclerPokemonAdapter()
         mListenerRecyclerPokemon = object : RecyclerPokemonListener {
             override fun onClick(id: Int) {

@@ -33,21 +33,19 @@ class RecyclerPokemonHolder(view: View) : RecyclerView.ViewHolder(view) {
         val s = ""
         val y = ""
         var urlImage =
-        //fazer a atribuição da imagem corretamente image_pokemon.setImageResource(R.drawable.androidzinho_grey)
-        Picasso.get().load(pokemon.image)
-            .into(image_pokemon, object : Callback {
-                override fun onSuccess() {
-                    setLayout(1)
-                }
-
-                override fun onError(e: Exception?) {
-                }
-            })
+            //fazer a atribuição da imagem corretamente image_pokemon.setImageResource(R.drawable.androidzinho_grey)
+            Picasso.get().load(pokemon.image)
+                .into(image_pokemon, object : Callback {
+                    override fun onSuccess() {
+                        setLayout(1)
+                    }
+                    override fun onError(e: Exception?) {
+                    }
+                })
         name_pokemon.setOnClickListener {
             listener.onClick(1)
         }
         //changing the layout if the pokemon is loaded
-
     }
 
     private fun setLayout(int: Int) {
