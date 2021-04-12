@@ -9,7 +9,9 @@ import org.koin.dsl.module
 
 val modules = module {
     viewModel {
-        MainActivityViewModel(get())
+        MainActivityViewModel(
+            dataBase = get()
+        )
     }
     single { get<PokemonsDataBase>().pokemonDao() }
     single {

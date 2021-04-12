@@ -11,7 +11,7 @@ import com.example.pokemon_doisdedin.view.viewholder.RecyclerPokemonHolder
 
 class RecyclerPokemonAdapter : RecyclerView.Adapter<RecyclerPokemonHolder>() {
     private lateinit var mListener: RecyclerPokemonListener
-    private lateinit var mListPokemon: ArrayList<PokemonResultModel>
+    private lateinit var mListPokemon: List<PokemonResultModel>
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = RecyclerPokemonHolder(
         LayoutInflater.from(parent.context).inflate(R.layout.pokemon, parent, false)
     )
@@ -27,7 +27,7 @@ class RecyclerPokemonAdapter : RecyclerView.Adapter<RecyclerPokemonHolder>() {
         mListener = listener
     }
 
-    fun setList(list: ArrayList<PokemonResultModel>) {
+    fun setList(list: List<PokemonResultModel>) {
         mListPokemon = list;
     }
 
