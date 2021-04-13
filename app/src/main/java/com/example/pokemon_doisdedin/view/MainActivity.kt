@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         mViewModel.pokemon()
 
-        setLayout()
+
         observeViewModel()
         observeSearchView()
     }
@@ -54,7 +54,8 @@ class MainActivity : AppCompatActivity() {
             mRecyclerPokemonAdapter.setList(it)
 
         })
-        mViewModel.mSearchViewNull.observe(this, Observer {
+        mViewModel.mKeepLoad.observe(this, Observer {
+            setLayout()
         })
     }
 
@@ -69,7 +70,6 @@ class MainActivity : AppCompatActivity() {
                 mViewModel.filter(newText)
                 return false
             }
-
         })
     }
 
