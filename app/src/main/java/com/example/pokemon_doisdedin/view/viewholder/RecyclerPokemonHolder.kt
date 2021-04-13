@@ -1,12 +1,16 @@
 package com.example.pokemon_doisdedin.view.viewholder
 
+import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.icu.number.NumberFormatter.with
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.toColorFilter
+import androidx.lifecycle.*
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.pokemon_doisdedin.R
@@ -14,10 +18,7 @@ import com.example.pokemon_doisdedin.services.model.PokemonResultModel
 import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.lang.Exception
 import kotlin.coroutines.coroutineContext
 
@@ -26,7 +27,7 @@ class RecyclerPokemonHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val name_pokemon: TextView = view.findViewById(R.id.name_pokemon)
     private val image_pokemon: ImageView = view.findViewById(R.id.image_pokemon)
     private val lottie: LottieAnimationView = view.findViewById(R.id.lottie)
-    var mKeepLoad = MutableLiveData<Boolean>()
+    private val background : ConstraintLayout = view.findViewById(R.id.background_gambiarra)
     fun bind(pokemon: PokemonResultModel, listener: RecyclerPokemonListener) {
         setLayout(0)
         name_pokemon.text = pokemon.name
@@ -36,14 +37,21 @@ class RecyclerPokemonHolder(view: View) : RecyclerView.ViewHolder(view) {
             Picasso.get().load(pokemon.image)
                 .into(image_pokemon, object : Callback {
                     override fun onSuccess() {
-                        setLayout(1)
+                        loadPalette()
                     }
                     override fun onError(e: Exception?) {
                     }
                 })
+        //set  layout pokemon
+//        mKeepLoad.observe(Lifecycle, Observer {
+//            if (it == true){
+//                setLayout(1)
+//            }
+//        })
         name_pokemon.setOnClickListener {
             listener.onClick(1)
         }
+
         //changing the layout if the pokemon is loaded
     }
 
@@ -57,6 +65,28 @@ class RecyclerPokemonHolder(view: View) : RecyclerView.ViewHolder(view) {
             image_pokemon.visibility = View.GONE
             lottie.visibility = View.VISIBLE
         }
+
+    }
+    private fun loadPalette(){
+        var drawable : BitmapDrawable = image_pokemon.drawable as BitmapDrawable
+        var bitMap: Bitmap = drawable.bitmap
+
+        var builder: Palette.Builder = Palette.Builder(bitMap)
+        builder.generate(object : Palette.PaletteAsyncListener {
+            override fun onGenerated(palette: Palette?) {
+                var lightMuted: Palette.Swatch? = palette?.lightMutedSwatch
+                var muted: Palette.Swatch? = palette?.mutedSwatch
+                if (lightMuted != null){
+                    background.background.setTint(lightMuted.rgb)
+                    name_pokemon.setTextColor(lightMuted.titleTextColor)
+                }else if(muted != null){
+                    background.background.setTint(muted.rgb)
+                    name_pokemon.setTextColor(muted.titleTextColor)
+                }
+                setLayout(1)
+            }
+
+        })
 
     }
 }

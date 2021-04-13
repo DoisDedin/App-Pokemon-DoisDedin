@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
             override fun onClick(id: Int) {
                 //nothing
             }
+
         }
         //preparando o terreno
         recyler_pokemons = findViewById(R.id.recycler_pokemons)
@@ -86,7 +87,6 @@ class MainActivity : AppCompatActivity() {
                 lottieRecycler?.visibility = View.GONE
             }
         })
-
     }
 
 
