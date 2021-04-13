@@ -12,12 +12,8 @@ import retrofit2.Response
 
 class PokemonRepository {
     private val mRemote = RetrofitPokemon.createService(PokemonService::class.java)
-
     fun pokemon(id: String, listener: APIListener<PokemonResultModel>) {
-
-
         val call: Call<PokemonResultModel> = mRemote.pokemon(id)
-
         call.enqueue(object : Callback<PokemonResultModel> {
             override fun onResponse(
                 call: Call<PokemonResultModel>,

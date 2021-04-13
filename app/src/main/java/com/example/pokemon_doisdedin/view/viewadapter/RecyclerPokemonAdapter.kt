@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemon_doisdedin.R
-import com.example.pokemon_doisdedin.model.PokemonModel
 import com.example.pokemon_doisdedin.services.model.PokemonResultModel
 import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
 import com.example.pokemon_doisdedin.view.viewholder.RecyclerPokemonHolder

@@ -6,7 +6,6 @@ import com.example.pokemon_doisdedin.viewmodel.MainActivityViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-
 val modules = module {
     viewModel {
         MainActivityViewModel(

@@ -4,10 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
@@ -15,7 +12,6 @@ import com.example.pokemon_doisdedin.R
 import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
 import com.example.pokemon_doisdedin.view.viewadapter.RecyclerPokemonAdapter
 import com.example.pokemon_doisdedin.viewmodel.MainActivityViewModel
-import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -36,7 +32,6 @@ class MainActivity : AppCompatActivity() {
             override fun onClick(id: Int) {
                 //nothing
             }
-
         }
         //preparando o terreno
         recyler_pokemons = findViewById(R.id.recycler_pokemons)
