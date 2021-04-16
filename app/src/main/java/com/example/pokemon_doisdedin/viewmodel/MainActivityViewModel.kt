@@ -5,37 +5,51 @@ import androidx.lifecycle.*
 
 import com.example.pokemon_doisdedin.services.constants.Constants
 import com.example.pokemon_doisdedin.services.listener.APIListener
-import com.example.pokemon_doisdedin.services.model.PokemonResultModel
+import com.example.pokemon_doisdedin.services.repository.local.room.entity.PokemonResultModel
 import com.example.pokemon_doisdedin.services.repository.PokemonRepository
-import com.example.pokemon_doisdedin.services.room.dao.PokemonsDataBase
+import com.example.pokemon_doisdedin.services.repository.local.room.dao.PokemonsDataBase
+import kotlinx.coroutines.*
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 
 
 class MainActivityViewModel(
     var dataBase: PokemonsDataBase
 ) : ViewModel() {
-    private val baseUrl: String = "https://pokeres.bastionbot.org/images/pokemon/"
+    private val baseUrl: String = Constants.LINK.POKEMOMIMAGE
     var mListPokemon = MutableLiveData<ArrayList<PokemonResultModel>>()
     var mListPokemonFilter: ArrayList<PokemonResultModel> = arrayListOf()
+    var mListAux: List<PokemonResultModel> = arrayListOf()
     var mKeepLoad = MutableLiveData<Boolean>()
     var mSearchViewNull = MutableLiveData<Boolean>()
     var mPokemonRepository = PokemonRepository()
     var mErro: String = ""
 
+    //carregar dos pokemons na lista de pokemons na cache (mListaPokemon)
+    fun loadPokemons() {
+        GlobalScope.launch(Dispatchers.IO) {
+            if (dataBaseIsValid()) {
+                mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
+                mKeepLoad.postValue(false)
+            } else {
+                pokemon()
+            }
+        }
+    }
 
-    fun pokemon() {
-        GlobalScope.launch {
+
+    //coletando os dados da api
+  fun  pokemon() {
+     GlobalScope.launch(Dispatchers.IO) {
             getPokemons(Constants.VALUES.SIZE).catch {
 
             }.collect {
+                //inserindo os pokemons dentro do banco de dados
                 mListPokemon.postValue(it)
+                dataBase.pokemonDao().addListPokemon(it)
             }
         }
     }
@@ -44,7 +58,7 @@ class MainActivityViewModel(
     fun getPokemons(size: Int): Flow<ArrayList<PokemonResultModel>> {
         var defaultPokemon = PokemonResultModel()
         var sendPokemon = ArrayList<PokemonResultModel>()
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.IO){
             delay(4000)
             mKeepLoad.postValue(false)
         }
@@ -77,8 +91,16 @@ class MainActivityViewModel(
             mListPokemonFilter.addAll(filtered as ArrayList<PokemonResultModel>)
             mListPokemon.value = mListPokemonFilter
         } else {
-            pokemon()
+            GlobalScope.launch(Dispatchers.IO) {
+                mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
+            }
+
         }
+    }
+
+    //fazer validação se o banco de dados do aplicativo esta muito obsoleto
+    fun dataBaseIsValid(): Boolean {
+        return true
     }
 
 }

@@ -1,5 +1,7 @@
 package com.example.pokemon_doisdedin
 
+
+import com.example.pokemon_doisdedin.services.koin.myModule.appComponent
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -8,7 +10,9 @@ class MyApplication: android.app.Application() {
         super.onCreate()
         startKoin {
             androidContext(this@MyApplication)
-            modules(com.example.pokemon_doisdedin.services.koin.modules)
+
+            modules(provideDependency())
         }
     }
+    open fun provideDependency() = appComponent
 }

@@ -12,14 +12,14 @@ import com.example.pokemon_doisdedin.R
 import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
 import com.example.pokemon_doisdedin.view.viewadapter.RecyclerPokemonAdapter
 import com.example.pokemon_doisdedin.viewmodel.MainActivityViewModel
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity() {
 
     private val mViewModel: MainActivityViewModel by viewModel()
-    private lateinit var mListenerRecyclerPokemon: RecyclerPokemonListener
-    private lateinit var mRecyclerPokemonAdapter: RecyclerPokemonAdapter
+    private val mRecyclerPokemonAdapter: RecyclerPokemonAdapter by inject()
     var lottieRecycler: LottieAnimationView? = null
     var recyler_pokemons: RecyclerView? = null
     var grid_layout_manager: GridLayoutManager? = null
@@ -27,23 +27,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mRecyclerPokemonAdapter = RecyclerPokemonAdapter()
-        mListenerRecyclerPokemon = object : RecyclerPokemonListener {
-            override fun onClick(id: Int) {
-                //nothing
-            }
-        }
         //preparando o terreno
         recyler_pokemons = findViewById(R.id.recycler_pokemons)
         lottieRecycler = findViewById(R.id.lottieRecycler)
         search_pokemon = findViewById(R.id.searchview_pokemons)
         grid_layout_manager = GridLayoutManager(this, 2)
         recyler_pokemons?.layoutManager = grid_layout_manager
-        mRecyclerPokemonAdapter.setListener(mListenerRecyclerPokemon)
-
-        mViewModel.pokemon()
-
-
+        mViewModel.loadPokemons()
         observeViewModel()
         observeSearchView()
     }
@@ -55,12 +45,12 @@ class MainActivity : AppCompatActivity() {
 
         })
         mViewModel.mKeepLoad.observe(this, Observer {
-            setLayout()
+            setLayout(it)
         })
     }
 
-    private fun observeSearchView(){
-        search_pokemon?.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
+    private fun observeSearchView() {
+        search_pokemon?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 mViewModel.filter(query)
                 return false
@@ -73,16 +63,14 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun setLayout() {
-
-        mViewModel.mKeepLoad.observe(this, Observer {
-            if (it == false) {
-                recyler_pokemons?.visibility = View.VISIBLE
-                search_pokemon?.visibility = View.VISIBLE
-                lottieRecycler?.visibility = View.GONE
-            }
-        })
+    private fun setLayout(boolean: Boolean) {
+        if (boolean == false) {
+            recyler_pokemons?.visibility = View.VISIBLE
+            search_pokemon?.visibility = View.VISIBLE
+            lottieRecycler?.visibility = View.GONE
+        }
     }
-
-
 }
+
+
+

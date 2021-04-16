@@ -11,8 +11,9 @@ import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.pokemon_doisdedin.R
-import com.example.pokemon_doisdedin.services.model.PokemonResultModel
+import com.example.pokemon_doisdedin.services.repository.local.room.entity.PokemonResultModel
 import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
+import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListenerImp
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
@@ -23,7 +24,7 @@ class RecyclerPokemonHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val image_pokemon: ImageView = view.findViewById(R.id.image_pokemon)
     private val lottie: LottieAnimationView = view.findViewById(R.id.lottie)
     private val background: ConstraintLayout = view.findViewById(R.id.background_gambiarra)
-    fun bind(pokemon: PokemonResultModel, listener: RecyclerPokemonListener) {
+    fun bind(pokemon: PokemonResultModel, listener: RecyclerPokemonListenerImp) {
         setLayout(0)
         name_pokemon.text = pokemon.name
         //fazer a atribuição da imagem corretamente image_pokemon.setImageResource(R.drawable.androidzinho_grey)
