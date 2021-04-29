@@ -18,7 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val mViewModel: MainActivityViewModel by viewModel()
+    private val mViewModel: MainActivityViewModel by viewModel<MainActivityViewModel>()
     private val mRecyclerPokemonAdapter: RecyclerPokemonAdapter by inject()
     var lottieRecycler: LottieAnimationView? = null
     var recyler_pokemons: RecyclerView? = null

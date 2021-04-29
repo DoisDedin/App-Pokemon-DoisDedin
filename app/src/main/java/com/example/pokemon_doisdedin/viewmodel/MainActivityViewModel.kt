@@ -1,12 +1,14 @@
 package com.example.pokemon_doisdedin.viewmodel
 
 
+import android.app.Application
 import androidx.lifecycle.*
 
 import com.example.pokemon_doisdedin.services.constants.Constants
 import com.example.pokemon_doisdedin.services.listener.APIListener
 import com.example.pokemon_doisdedin.services.repository.local.room.entity.PokemonResultModel
 import com.example.pokemon_doisdedin.services.repository.PokemonRepository
+import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepository
 import com.example.pokemon_doisdedin.services.repository.local.room.dao.PokemonsDataBase
 import kotlinx.coroutines.*
 
@@ -17,7 +19,9 @@ import kotlinx.coroutines.flow.flow
 
 
 class MainActivityViewModel(
-    var dataBase: PokemonsDataBase
+    var application: Application,
+    var dataBase: PokemonsDataBase,
+    var dataStore: DataStoreRepository
 ) : ViewModel() {
     private val baseUrl: String = Constants.LINK.POKEMOMIMAGE
     var mListPokemon = MutableLiveData<ArrayList<PokemonResultModel>>()
@@ -28,36 +32,44 @@ class MainActivityViewModel(
     var mPokemonRepository = PokemonRepository()
     var mErro: String = ""
 
+    val readDataStore = dataStore.readDataStore.asLiveData()
+
+    fun saveDataStore(myName : String) = viewModelScope.launch(Dispatchers.IO) {
+        dataStore.saveDataStore(myName)
+    }
+
     //carregar a lista de pokemons ( se haver local pega localmente) (se não pega remotamente)
     fun loadPokemons() {
-        GlobalScope.launch(Dispatchers.IO) {
-            if (dataBaseIsValid()) {
-                mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
-                mKeepLoad.postValue(false)
-            } else {
-                getPokemonApi()
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                if (dataBaseIsValid()) {
+                    mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
+                    mKeepLoad.postValue(false)
+                } else {
+                    getPokemon()
+                }
             }
+
         }
     }
 
     //coletando os dados da api / inserindo eles no Room
-  fun  getPokemonApi() {
-     GlobalScope.launch(Dispatchers.IO) {
-            getPokemons(Constants.VALUES.SIZE).catch {
+    suspend fun getPokemon() {
+        getPokemonsApi(Constants.VALUES.SIZE).catch {
 
-            }.collect {
-                //inserindo os pokemons dentro do banco de dados
-                mListPokemon.postValue(it)
-                dataBase.pokemonDao().addListPokemon(it)
-            }
+        }.collect {
+            //inserindo os pokemons dentro do banco de dados
+            mListPokemon.postValue(it)
+            dataBase.pokemonDao().addListPokemon(it)
         }
+
     }
 
     //obtendo pokemons da api
-    fun getPokemons(size: Int): Flow<ArrayList<PokemonResultModel>> {
+    fun getPokemonsApi(size: Int): Flow<ArrayList<PokemonResultModel>> {
         var defaultPokemon = PokemonResultModel()
         var sendPokemon = ArrayList<PokemonResultModel>()
-        GlobalScope.launch(Dispatchers.IO){
+        GlobalScope.launch(Dispatchers.IO) {
             delay(4000)
             mKeepLoad.postValue(false)
         }
@@ -68,6 +80,7 @@ class MainActivityViewModel(
                         mode.image = "$baseUrl${mode.id.toString()}.png"
                         sendPokemon.add(mode)
                     }
+
                     override fun onFailure(str: String) {
                         mErro = "ApiErro"
                         defaultPokemon.id = x
