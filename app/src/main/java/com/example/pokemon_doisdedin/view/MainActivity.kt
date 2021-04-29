@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         })
         mViewModel.mKeepLoad.observe(this, Observer {
             setLayout(it)
+
         })
     }
 

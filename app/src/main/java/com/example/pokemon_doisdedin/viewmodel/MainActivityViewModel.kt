@@ -28,21 +28,20 @@ class MainActivityViewModel(
     var mPokemonRepository = PokemonRepository()
     var mErro: String = ""
 
-    //carregar dos pokemons na lista de pokemons na cache (mListaPokemon)
+    //carregar a lista de pokemons ( se haver local pega localmente) (se não pega remotamente)
     fun loadPokemons() {
         GlobalScope.launch(Dispatchers.IO) {
             if (dataBaseIsValid()) {
                 mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
                 mKeepLoad.postValue(false)
             } else {
-                pokemon()
+                getPokemonApi()
             }
         }
     }
 
-
-    //coletando os dados da api
-  fun  pokemon() {
+    //coletando os dados da api / inserindo eles no Room
+  fun  getPokemonApi() {
      GlobalScope.launch(Dispatchers.IO) {
             getPokemons(Constants.VALUES.SIZE).catch {
 
@@ -69,7 +68,6 @@ class MainActivityViewModel(
                         mode.image = "$baseUrl${mode.id.toString()}.png"
                         sendPokemon.add(mode)
                     }
-
                     override fun onFailure(str: String) {
                         mErro = "ApiErro"
                         defaultPokemon.id = x
@@ -94,13 +92,12 @@ class MainActivityViewModel(
             GlobalScope.launch(Dispatchers.IO) {
                 mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
             }
-
         }
     }
 
     //fazer validação se o banco de dados do aplicativo esta muito obsoleto
     fun dataBaseIsValid(): Boolean {
-        return true
+        return false
     }
 
 }
