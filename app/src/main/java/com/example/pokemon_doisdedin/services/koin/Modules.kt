@@ -1,6 +1,7 @@
 package com.example.pokemon_doisdedin.services.koin
 
 import androidx.room.Room
+import com.example.pokemon_doisdedin.services.auxiliares.ValidacaoTempo
 import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepository
 import com.example.pokemon_doisdedin.services.repository.local.room.dao.PokemonsDataBase
 import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
@@ -16,9 +17,12 @@ object myModule {
             MainActivityViewModel(
                 application = get(),
                 dataBase = get(),
-                dataStore = get()
+                dataStore = get(),
+                validation = get()
             )
         }
+
+        factory { ValidacaoTempo(get()) }
         single { DataStoreRepository(get()) }
         single { get<PokemonsDataBase>().pokemonDao() }
         single {

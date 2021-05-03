@@ -9,6 +9,7 @@ import androidx.datastore.preferences.emptyPreferences
 import com.example.pokemon_doisdedin.services.constants.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
@@ -24,7 +25,6 @@ class DataStoreRepository(context: Context) {
             preference[Constants.DATA_STORE.PREFERENCES_KEYS.NAME] = name
         }
     }
-
     val readDataStore: Flow<String> = dataStore.data
         .catch { exception ->
             if (exception is IOException){
@@ -38,4 +38,8 @@ class DataStoreRepository(context: Context) {
             val myName = preference[Constants.DATA_STORE.PREFERENCES_KEYS.NAME] ?: "NONE"
             myName
         }
+    suspend fun readDataStore():String{
+        val preferences = dataStore.data.first()
+        return preferences[Constants.DATA_STORE.PREFERENCES_KEYS.NAME].toString() ?: "NONE"
+    }
 }

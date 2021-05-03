@@ -1,9 +1,11 @@
 package com.example.pokemon_doisdedin.view
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,8 +14,12 @@ import com.example.pokemon_doisdedin.R
 import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
 import com.example.pokemon_doisdedin.view.viewadapter.RecyclerPokemonAdapter
 import com.example.pokemon_doisdedin.viewmodel.MainActivityViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.time.LocalDateTime
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,10 +39,32 @@ class MainActivity : AppCompatActivity() {
         search_pokemon = findViewById(R.id.searchview_pokemons)
         grid_layout_manager = GridLayoutManager(this, 2)
         recyler_pokemons?.layoutManager = grid_layout_manager
-        mViewModel.loadPokemons()
+        GlobalScope.launch {
+            mViewModel.loadPokemons()
+        }
         observeViewModel()
         observeSearchView()
     }
+
+    override fun onResume() {
+        super.onResume()
+        setLayout(true)
+       // mViewModel.loadPokemons()
+        observeViewModel()
+        observeSearchView()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        var x = Calendar.getInstance().time
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
 
     private fun observeViewModel() {
         mViewModel.mListPokemon.observe(this, Observer {
@@ -45,8 +73,9 @@ class MainActivity : AppCompatActivity() {
 
         })
         mViewModel.mKeepLoad.observe(this, Observer {
-            setLayout(it)
-
+            if (it == false){
+                setLayout(false)
+            }
         })
     }
 
@@ -69,6 +98,10 @@ class MainActivity : AppCompatActivity() {
             recyler_pokemons?.visibility = View.VISIBLE
             search_pokemon?.visibility = View.VISIBLE
             lottieRecycler?.visibility = View.GONE
+        }else{
+            recyler_pokemons?.visibility = View.GONE
+            search_pokemon?.visibility = View.GONE
+            lottieRecycler?.visibility = View.VISIBLE
         }
     }
 }

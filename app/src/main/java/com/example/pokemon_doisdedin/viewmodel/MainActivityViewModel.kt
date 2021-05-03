@@ -3,6 +3,7 @@ package com.example.pokemon_doisdedin.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.example.pokemon_doisdedin.services.auxiliares.ValidacaoTempo
 
 import com.example.pokemon_doisdedin.services.constants.Constants
 import com.example.pokemon_doisdedin.services.listener.APIListener
@@ -21,7 +22,8 @@ import kotlinx.coroutines.flow.flow
 class MainActivityViewModel(
     var application: Application,
     var dataBase: PokemonsDataBase,
-    var dataStore: DataStoreRepository
+    var dataStore: DataStoreRepository,
+    var validation: ValidacaoTempo
 ) : ViewModel() {
     private val baseUrl: String = Constants.LINK.POKEMOMIMAGE
     var mListPokemon = MutableLiveData<ArrayList<PokemonResultModel>>()
@@ -39,18 +41,20 @@ class MainActivityViewModel(
     }
 
     //carregar a lista de pokemons ( se haver local pega localmente) (se não pega remotamente)
-    fun loadPokemons() {
-        GlobalScope.launch {
+    suspend fun loadPokemons() {
+        mKeepLoad.postValue(true)
+        var currentTime = System.currentTimeMillis()
             withContext(Dispatchers.IO) {
-                if (dataBaseIsValid()) {
+                if (dataBaseIsValid(currentTime)) {
                     mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
                     mKeepLoad.postValue(false)
                 } else {
+                    dataStore.saveDataStore(currentTime.toString())
                     getPokemon()
                 }
             }
 
-        }
+
     }
 
     //coletando os dados da api / inserindo eles no Room
@@ -108,9 +112,9 @@ class MainActivityViewModel(
         }
     }
 
-    //fazer validação se o banco de dados do aplicativo esta muito obsoleto
-    fun dataBaseIsValid(): Boolean {
-        return false
+    //fazer validação se o banco de dados do aplicativo esta  obsoleto
+    suspend fun dataBaseIsValid(currentTime :Long): Boolean {
+        return validation.cacheIsValid(currentTime)
     }
 
 }
