@@ -1,27 +1,28 @@
 package com.example.pokemon_doisdedin.services.auxiliares
+
 import android.util.Log
+import androidx.lifecycle.asLiveData
 import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepository
 import kotlinx.coroutines.GlobalScope
 
 private const val ABOUT_TEXT_KEY = "ABOUT_TEXT_KEY"
 private const val ABOUT_TEXT_CACHE_TIME = "ABOUT_TEXT_CACHE_TIME"
 private const val TIME_CACHE_VALID = 86400000L // 60 * 60 * 24 * 1000
-class ValidacaoTempo( var dataStore: DataStoreRepository){
+private const val TIME_CACHE_1_MIN = 60000L //
+class ValidacaoTempo(var dataStore: DataStoreRepository) {
 
-
-    suspend  fun cacheIsValid(currentTime: Long): Boolean{
-        var lastTimeCache = dataStore.readDataStore()
-        if (lastTimeCache != "null"){
-            return currentTime - lastTimeCache.toLong() >= TIME_CACHE_VALID
-        }
-        else{
+    suspend fun cacheIsValid(currentTime: Long): Boolean {
+        var oldTime = dataStore.readTime()
+        if (oldTime == null) {
             return false
+        } else {
+            var result = currentTime - oldTime
+            return result <= TIME_CACHE_1_MIN
         }
 
     }
 
 }
-
 
 
 //private const val ABOUT_TEXT_KEY = "ABOUT_TEXT_KEY"

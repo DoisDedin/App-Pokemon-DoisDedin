@@ -1,10 +1,12 @@
 package com.example.pokemon_doisdedin.view
 
+import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,8 +16,7 @@ import com.example.pokemon_doisdedin.R
 import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
 import com.example.pokemon_doisdedin.view.viewadapter.RecyclerPokemonAdapter
 import com.example.pokemon_doisdedin.viewmodel.MainActivityViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.LocalDateTime
@@ -39,30 +40,33 @@ class MainActivity : AppCompatActivity() {
         search_pokemon = findViewById(R.id.searchview_pokemons)
         grid_layout_manager = GridLayoutManager(this, 2)
         recyler_pokemons?.layoutManager = grid_layout_manager
-        GlobalScope.launch {
-            mViewModel.loadPokemons()
-        }
+
+
         observeViewModel()
         observeSearchView()
+
+
+
     }
 
     override fun onResume() {
         super.onResume()
-        setLayout(true)
-       // mViewModel.loadPokemons()
-        observeViewModel()
-        observeSearchView()
+
+        mViewModel.loadPokemons()
+        Toast.makeText(this, "resume", Toast.LENGTH_LONG).show()
     }
 
     override fun onPause() {
         super.onPause()
+        setLayout(false)
+        Toast.makeText(this, "pause", Toast.LENGTH_LONG).show()
 
-        var x = Calendar.getInstance().time
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Toast.makeText(this, "destroy", Toast.LENGTH_LONG).show()
     }
 
 
@@ -73,8 +77,17 @@ class MainActivity : AppCompatActivity() {
 
         })
         mViewModel.mKeepLoad.observe(this, Observer {
-            if (it == false){
+            if (it == false) {
                 setLayout(false)
+            }else {
+                setLayout(true)
+            }
+        })
+        mViewModel.mLook.observe(this, Observer {
+            if (it == "local_data") {
+                Toast.makeText(this, "local data", Toast.LENGTH_LONG).show()
+            } else if (it == "remote_data") {
+                Toast.makeText(this, "remote data", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -98,7 +111,7 @@ class MainActivity : AppCompatActivity() {
             recyler_pokemons?.visibility = View.VISIBLE
             search_pokemon?.visibility = View.VISIBLE
             lottieRecycler?.visibility = View.GONE
-        }else{
+        } else {
             recyler_pokemons?.visibility = View.GONE
             search_pokemon?.visibility = View.GONE
             lottieRecycler?.visibility = View.VISIBLE

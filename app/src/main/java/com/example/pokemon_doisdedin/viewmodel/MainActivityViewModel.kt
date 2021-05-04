@@ -2,6 +2,7 @@ package com.example.pokemon_doisdedin.viewmodel
 
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.*
 import com.example.pokemon_doisdedin.services.auxiliares.ValidacaoTempo
 
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import okhttp3.Dispatcher
 
 
 class MainActivityViewModel(
@@ -26,6 +28,7 @@ class MainActivityViewModel(
     var validation: ValidacaoTempo
 ) : ViewModel() {
     private val baseUrl: String = Constants.LINK.POKEMOMIMAGE
+    var mLook = MutableLiveData<String>()
     var mListPokemon = MutableLiveData<ArrayList<PokemonResultModel>>()
     var mListPokemonFilter: ArrayList<PokemonResultModel> = arrayListOf()
     var mListAux: List<PokemonResultModel> = arrayListOf()
@@ -34,27 +37,28 @@ class MainActivityViewModel(
     var mPokemonRepository = PokemonRepository()
     var mErro: String = ""
 
-    val readDataStore = dataStore.readDataStore.asLiveData()
-
-    fun saveDataStore(myName : String) = viewModelScope.launch(Dispatchers.IO) {
-        dataStore.saveDataStore(myName)
-    }
-
+    //banco de dados auxiliares
     //carregar a lista de pokemons ( se haver local pega localmente) (se não pega remotamente)
-    suspend fun loadPokemons() {
-        mKeepLoad.postValue(true)
+    fun loadPokemons() {
+
+        mKeepLoad.value = true
         var currentTime = System.currentTimeMillis()
+        GlobalScope.launch(Dispatchers.IO) {
             withContext(Dispatchers.IO) {
                 if (dataBaseIsValid(currentTime)) {
                     mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
+
                     mKeepLoad.postValue(false)
+                    mLook.postValue("local_data")
+
                 } else {
-                    dataStore.saveDataStore(currentTime.toString())
+                    dataStore.storeTime(currentTime)
                     getPokemon()
+                    mLook.postValue("remote_data")
+
                 }
             }
-
-
+        }
     }
 
     //coletando os dados da api / inserindo eles no Room
@@ -113,8 +117,8 @@ class MainActivityViewModel(
     }
 
     //fazer validação se o banco de dados do aplicativo esta  obsoleto
-    suspend fun dataBaseIsValid(currentTime :Long): Boolean {
-        return validation.cacheIsValid(currentTime)
+    suspend fun dataBaseIsValid(currentTime: Long): Boolean {
+        return false//validation.cacheIsValid(currentTime)
     }
 
 }
