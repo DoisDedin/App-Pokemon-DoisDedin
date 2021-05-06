@@ -89,6 +89,7 @@ class MainActivityViewModel(
             mListPokemonFilter.addAll(filtered as ArrayList<PokemonResultModel>)
             mListPokemon.value = mListPokemonFilter
         } else {
+            var s = ""
             GlobalScope.launch(Dispatchers.IO) {
                 mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
             }
