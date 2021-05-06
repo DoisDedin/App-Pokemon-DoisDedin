@@ -37,7 +37,7 @@ class MainActivityViewModel(
     //carregar a lista de pokemons ( se haver local pega localmente) (se não pega remotamente)
     fun loadPokemons() {
         GlobalScope.launch(Dispatchers.IO) {
-            if (dataBaseIsValid()) {
+            if (dataBaseIsValid(System.currentTimeMillis())) {
                 mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
                 mKeepLoad.postValue(false)
             } else {
@@ -103,8 +103,8 @@ class MainActivityViewModel(
     }
 
     //fazer validação se o banco de dados do aplicativo esta muito obsoleto
-    fun dataBaseIsValid(): Boolean {
-        return false
+    suspend fun dataBaseIsValid(currentTime : Long): Boolean {
+        return validation.cacheIsValid(currentTime )
     }
 
 }
