@@ -6,7 +6,7 @@ class Constants private constructor() {
         const val SUCCESS = 200
     }
     object VALUES{
-        const val SIZE = 30
+        const val SIZE = 100
     }
     object LINK{
         const val POKEMOMIMAGE = "https://pokeres.bastionbot.org/images/pokemon/"

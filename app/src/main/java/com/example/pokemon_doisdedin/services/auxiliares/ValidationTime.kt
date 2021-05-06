@@ -13,10 +13,11 @@ class ValidationTime(var dataStore: DataStoreRepositoryLocal) {
     suspend fun cacheIsValid(currentTime: Long): Int {
         var oldTime = dataStore.readTime()
         if (oldTime == null) {
+            var s = ""
             return 0 //not local database
         } else {
             var result = currentTime - oldTime
-            if (result > TIME_CACHE_1_MIN) {
+            if (result > TIME_CACHE_VALID) {
                 return 1 // local database and is invalid
             } else {
                 return 2 // local database and is valid

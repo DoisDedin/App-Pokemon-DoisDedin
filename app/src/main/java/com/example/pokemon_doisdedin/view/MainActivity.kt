@@ -38,6 +38,13 @@ class MainActivity : AppCompatActivity() {
         observeViewModel()
         observeSearchView()
 
+      //  Toast.makeText(applicationContext, "onCreate", Toast.LENGTH_SHORT).show()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+      //  Toast.makeText(applicationContext, "onResume", Toast.LENGTH_SHORT).show()
         mViewModel.loadPokemons()
 
     }
@@ -50,10 +57,11 @@ class MainActivity : AppCompatActivity() {
 
         })
         mViewModel.mListPokemonDataBase.observe(this, Observer {
-            if (it.size != 0){
+            if (it.size != 0) {
                 mViewModel.tradeMemory()
+              //  Toast.makeText(applicationContext, "memory it.size", Toast.LENGTH_SHORT).show()
             }
-            Toast.makeText(applicationContext, "memory 0", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(applicationContext, "memory 0", Toast.LENGTH_SHORT).show()
         })
         mViewModel.mKeepLoad.observe(this, Observer {
             setLayout(it)
@@ -62,13 +70,20 @@ class MainActivity : AppCompatActivity() {
         mViewModel.mWhereData.observe(this, Observer {
             when (it) {
                 0 -> {
-                    Toast.makeText(applicationContext, "null current time", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "null local data", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 1 -> {
-                    Toast.makeText(applicationContext, "invalid local data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "invalid local data", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                2->{
+                    Toast.makeText(applicationContext, "local data valid", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 else -> {
-                    Toast.makeText(applicationContext, "full remote data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "null", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         })
@@ -93,6 +108,10 @@ class MainActivity : AppCompatActivity() {
             recyler_pokemons?.visibility = View.VISIBLE
             search_pokemon?.visibility = View.VISIBLE
             lottieRecycler?.visibility = View.GONE
+        }else {
+            recyler_pokemons?.visibility = View.GONE
+            search_pokemon?.visibility = View.GONE
+            lottieRecycler?.visibility = View.VISIBLE
         }
     }
 }

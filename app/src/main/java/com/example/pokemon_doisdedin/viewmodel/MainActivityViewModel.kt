@@ -43,7 +43,6 @@ class MainActivityViewModel(
             when (mWhereData.value) {
                 2 -> {
                     mListPokemonDataBase.postValue(ArrayList(dataBase.pokemonDao().getAll()))
-                    delay(4000)
                     mKeepLoad.postValue(false)
                 }
                 else -> {
@@ -80,7 +79,7 @@ class MainActivityViewModel(
         var defaultPokemon = PokemonResultModel()
         var sendPokemon = ArrayList<PokemonResultModel>()
         GlobalScope.launch(Dispatchers.IO) {
-            delay(4000)
+            delay(8000)
             mKeepLoad.postValue(false)
         }
         return flow<ArrayList<PokemonResultModel>> {
