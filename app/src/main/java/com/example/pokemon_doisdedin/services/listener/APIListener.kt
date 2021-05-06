@@ -1,8 +1,8 @@
 package com.example.pokemon_doisdedin.services.listener
 
 interface APIListener<T> {
-    fun onSuccess(mode: T)
+    suspend fun onSuccess(mode: T)
 
-    fun onFailure(str: String)
+    suspend fun onFailure(str: String)
 
 }

@@ -27,22 +27,28 @@ class MainActivityViewModel(
 ) : ViewModel() {
     private val baseUrl: String = Constants.LINK.POKEMOMIMAGE
     var mListPokemon = MutableLiveData<ArrayList<PokemonResultModel>>()
+    var mListPokemonDataBase = MutableLiveData<ArrayList<PokemonResultModel>>()
     var mListPokemonFilter: ArrayList<PokemonResultModel> = arrayListOf()
     var mListAux: List<PokemonResultModel> = arrayListOf()
     var mKeepLoad = MutableLiveData<Boolean>()
     var mSearchViewNull = MutableLiveData<Boolean>()
     var mPokemonRepository = PokemonRepository()
+    var mWhereData = MutableLiveData<Int>()
     var mErro: String = ""
 
     //carregar a lista de pokemons ( se haver local pega localmente) (se não pega remotamente)
     fun loadPokemons() {
         GlobalScope.launch(Dispatchers.IO) {
-            when (dataBaseIsValid(System.currentTimeMillis())) {
+            mWhereData.postValue(dataBaseIsValid(System.currentTimeMillis())!!)
+            when (mWhereData.value) {
                 2 -> {
-                    mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
+                    mListPokemonDataBase.postValue(ArrayList(dataBase.pokemonDao().getAll()))
+                    delay(4000)
                     mKeepLoad.postValue(false)
                 }
                 else -> {
+                    dataBase.pokemonDao().deleteAllPokemons()
+                    var s = "x"
                     getPokemonApi()
                 }
             }
@@ -56,11 +62,17 @@ class MainActivityViewModel(
 
             }.collect {
                 //inserindo os pokemons dentro do banco de dados
-                mListPokemon.postValue(it)
+                mListPokemonDataBase.postValue(it)
                 dataBase.pokemonDao().addListPokemon(it)
                 dataStore.storeTime(System.currentTimeMillis())
             }
         }
+    }
+
+    fun tradeMemory() {
+        mListPokemon.value = mListPokemonDataBase.value
+        var s = ""
+
     }
 
     //obtendo pokemons da api
@@ -76,19 +88,25 @@ class MainActivityViewModel(
                 mPokemonRepository.pokemon(
                     x.toString(),
                     object : APIListener<PokemonResultModel> {
-                        override fun onSuccess(mode: PokemonResultModel) {
+                        override suspend fun onSuccess(mode: PokemonResultModel) {
                             mode.image = "$baseUrl${mode.id.toString()}.png"
                             sendPokemon.add(mode)
+                            if (sendPokemon.size == size) {
+                                emit(sendPokemon)
+                            }
+
                         }
 
-                        override fun onFailure(str: String) {
+                        override suspend fun onFailure(str: String) {
                             mErro = "ApiErro"
                             defaultPokemon.id = x
                             sendPokemon.add(defaultPokemon)
+                            if (sendPokemon.size == size) {
+                                emit(sendPokemon)
+                            }
                         }
                     })
             }
-            emit(sendPokemon)
         }
     }
 

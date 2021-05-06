@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,20 +34,43 @@ class MainActivity : AppCompatActivity() {
         search_pokemon = findViewById(R.id.searchview_pokemons)
         grid_layout_manager = GridLayoutManager(this, 2)
         recyler_pokemons?.layoutManager = grid_layout_manager
-        mViewModel.loadPokemons()
+
         observeViewModel()
         observeSearchView()
+
+        mViewModel.loadPokemons()
+
     }
 
     private fun observeViewModel() {
         mViewModel.mListPokemon.observe(this, Observer {
+            var x = it.size
             recyler_pokemons?.adapter = mRecyclerPokemonAdapter
             mRecyclerPokemonAdapter.setList(it)
 
         })
+        mViewModel.mListPokemonDataBase.observe(this, Observer {
+            if (it.size != 0){
+                mViewModel.tradeMemory()
+            }
+            Toast.makeText(applicationContext, "memory 0", Toast.LENGTH_SHORT).show()
+        })
         mViewModel.mKeepLoad.observe(this, Observer {
             setLayout(it)
 
+        })
+        mViewModel.mWhereData.observe(this, Observer {
+            when (it) {
+                0 -> {
+                    Toast.makeText(applicationContext, "null current time", Toast.LENGTH_SHORT).show()
+                }
+                1 -> {
+                    Toast.makeText(applicationContext, "invalid local data", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    Toast.makeText(applicationContext, "full remote data", Toast.LENGTH_SHORT).show()
+                }
+            }
         })
     }
 
