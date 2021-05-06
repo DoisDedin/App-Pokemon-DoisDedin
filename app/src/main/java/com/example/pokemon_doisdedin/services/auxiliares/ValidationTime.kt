@@ -7,15 +7,20 @@ private const val ABOUT_TEXT_KEY = "ABOUT_TEXT_KEY"
 private const val ABOUT_TEXT_CACHE_TIME = "ABOUT_TEXT_CACHE_TIME"
 private const val TIME_CACHE_VALID = 86400000L // 60 * 60 * 24 * 1000
 private const val TIME_CACHE_1_MIN = 60000L //
+
 class ValidationTime(var dataStore: DataStoreRepositoryLocal) {
 
-    suspend fun cacheIsValid(currentTime: Long): Boolean {
+    suspend fun cacheIsValid(currentTime: Long): Int {
         var oldTime = dataStore.readTime()
         if (oldTime == null) {
-            return false
+            return 0 //not local database
         } else {
             var result = currentTime - oldTime
-            return result <= TIME_CACHE_1_MIN
+            if (result > TIME_CACHE_1_MIN) {
+                return 1 // local database and is invalid
+            } else {
+                return 2 // local database and is valid
+            }
         }
     }
 }
