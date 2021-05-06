@@ -54,6 +54,7 @@ class MainActivityViewModel(
             }.collect {
                 //inserindo os pokemons dentro do banco de dados
                 mListPokemon.postValue(it)
+                dataStore.storeTime(System.currentTimeMillis())
                 dataBase.pokemonDao().addListPokemon(it)
             }
         }
