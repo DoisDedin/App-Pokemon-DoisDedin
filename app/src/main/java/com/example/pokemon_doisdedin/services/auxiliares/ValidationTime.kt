@@ -20,7 +20,7 @@ class ValidationTime(var dataStore: DataStoreRepositoryLocal) {
     }
 }
 
-
+//create by Guilherme ( Morcego )
 //private const val ABOUT_TEXT_KEY = "ABOUT_TEXT_KEY"
 //private const val ABOUT_TEXT_CACHE_TIME = "ABOUT_TEXT_CACHE_TIME"
 //private const val TIME_CACHE_VALID = 86400000L // 60 * 60 * 24 * 1000

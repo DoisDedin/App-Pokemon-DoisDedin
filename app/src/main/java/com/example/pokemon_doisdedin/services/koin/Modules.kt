@@ -1,8 +1,9 @@
 package com.example.pokemon_doisdedin.services.koin
 
 import androidx.room.Room
+import com.example.pokemon_doisdedin.services.auxiliares.ValidationTime
+import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepositoryLocal
 import com.example.pokemon_doisdedin.services.repository.local.room.dao.PokemonsDataBase
-import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
 import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListenerImp
 import com.example.pokemon_doisdedin.view.viewadapter.RecyclerPokemonAdapter
 import com.example.pokemon_doisdedin.viewmodel.MainActivityViewModel
@@ -13,10 +14,15 @@ object myModule {
     val modules = module {
         viewModel {
             MainActivityViewModel(
-                dataBase = get()
+                application = get(),
+                dataBase = get(),
+                dataStore = get(),
+                validation = get()
             )
         }
 
+        factory { ValidationTime(get()) }
+        single { DataStoreRepositoryLocal(get()) }
         single { get<PokemonsDataBase>().pokemonDao() }
         single {
             Room.databaseBuilder(get(), PokemonsDataBase::class.java, "pokemons_db")
@@ -31,4 +37,3 @@ object myModule {
 
     val appComponent = listOf(modules, modules1)
 }
-

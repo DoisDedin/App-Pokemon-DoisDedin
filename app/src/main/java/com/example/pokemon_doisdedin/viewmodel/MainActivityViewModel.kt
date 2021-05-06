@@ -1,12 +1,15 @@
 package com.example.pokemon_doisdedin.viewmodel
 
 
+import android.app.Application
 import androidx.lifecycle.*
+import com.example.pokemon_doisdedin.services.auxiliares.ValidationTime
 
 import com.example.pokemon_doisdedin.services.constants.Constants
 import com.example.pokemon_doisdedin.services.listener.APIListener
 import com.example.pokemon_doisdedin.services.repository.local.room.entity.PokemonResultModel
 import com.example.pokemon_doisdedin.services.repository.PokemonRepository
+import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepositoryLocal
 import com.example.pokemon_doisdedin.services.repository.local.room.dao.PokemonsDataBase
 import kotlinx.coroutines.*
 
@@ -17,7 +20,10 @@ import kotlinx.coroutines.flow.flow
 
 
 class MainActivityViewModel(
-    var dataBase: PokemonsDataBase
+    var application: Application,
+    var dataBase: PokemonsDataBase,
+    var dataStore: DataStoreRepositoryLocal,
+    var validation: ValidationTime
 ) : ViewModel() {
     private val baseUrl: String = Constants.LINK.POKEMOMIMAGE
     var mListPokemon = MutableLiveData<ArrayList<PokemonResultModel>>()
