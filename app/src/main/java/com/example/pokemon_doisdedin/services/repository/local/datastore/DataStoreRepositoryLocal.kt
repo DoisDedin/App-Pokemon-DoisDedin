@@ -16,7 +16,7 @@ import java.io.IOException
 
 const val PREFERENCE_NAME = "my_preference"
 
-class DataStore(context: Context) {
+class DataStoreRepositoryLocal(context: Context) {
     private val dataStore = context.createDataStore(name = "data_store")
 
     companion object {
