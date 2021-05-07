@@ -1,26 +1,19 @@
 package com.example.pokemon_doisdedin.viewmodel
 
 
-import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.*
 import com.example.pokemon_doisdedin.services.auxiliares.ValidationTime
-import com.example.pokemon_doisdedin.services.auxiliares.ValidacaoTempo
-
 import com.example.pokemon_doisdedin.services.constants.Constants
 import com.example.pokemon_doisdedin.services.listener.APIListener
 import com.example.pokemon_doisdedin.services.model.PokemonResultModel
 import com.example.pokemon_doisdedin.services.repository.PokemonRepository
 import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepositoryLocal
-import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepository
 import com.example.pokemon_doisdedin.services.repository.local.room.dao.PokemonsDataBase
 import kotlinx.coroutines.*
-
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import okhttp3.Dispatcher
 
 
 class MainActivityViewModel(
