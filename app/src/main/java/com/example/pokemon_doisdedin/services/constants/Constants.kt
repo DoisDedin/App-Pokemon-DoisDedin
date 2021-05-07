@@ -11,4 +11,7 @@ class Constants private constructor() {
     object LINK{
         const val POKEMOMIMAGE = "https://pokeres.bastionbot.org/images/pokemon/"
     }
+    object DATA_BASE{
+        const val NAME_DATA_BASE = "pokemons_db"
+    }
 }

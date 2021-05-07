@@ -1,13 +1,9 @@
 package com.example.pokemon_doisdedin.services.repository
 
-import com.example.pokemon_doisdedin.services.constants.Constants
 import com.example.pokemon_doisdedin.services.listener.APIListener
-import com.example.pokemon_doisdedin.services.repository.local.room.entity.PokemonResultModel
+import com.example.pokemon_doisdedin.services.model.PokemonResultModel
 import com.example.pokemon_doisdedin.services.repository.remoto.PokemonService
 import com.example.pokemon_doisdedin.services.repository.remoto.RetrofitPokemon
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 
 class PokemonRepository {

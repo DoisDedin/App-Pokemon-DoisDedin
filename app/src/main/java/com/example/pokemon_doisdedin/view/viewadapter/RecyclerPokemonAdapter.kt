@@ -4,13 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemon_doisdedin.R
-import com.example.pokemon_doisdedin.services.repository.local.room.entity.PokemonResultModel
-import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
+import com.example.pokemon_doisdedin.services.model.PokemonResultModel
 import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListenerImp
 import com.example.pokemon_doisdedin.view.viewholder.RecyclerPokemonHolder
 
 class RecyclerPokemonAdapter(
-    var mListener: RecyclerPokemonListenerImp
+    private var mListener: RecyclerPokemonListenerImp
 ) : RecyclerView.Adapter<RecyclerPokemonHolder>() {
     private lateinit var mListPokemon: List<PokemonResultModel>
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = RecyclerPokemonHolder(
@@ -26,7 +25,7 @@ class RecyclerPokemonAdapter(
     }
 
     fun setList(list: List<PokemonResultModel>) {
-        mListPokemon = list;
+        list.also { mListPokemon = it }
     }
 
 }

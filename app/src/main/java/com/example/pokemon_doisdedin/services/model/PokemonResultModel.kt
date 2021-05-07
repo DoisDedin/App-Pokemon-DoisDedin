@@ -1,4 +1,4 @@
-package com.example.pokemon_doisdedin.services.repository.local.room.entity
+package com.example.pokemon_doisdedin.services.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

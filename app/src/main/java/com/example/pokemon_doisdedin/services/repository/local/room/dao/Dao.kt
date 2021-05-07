@@ -1,10 +1,9 @@
 package com.example.pokemon_doisdedin.services.repository.local.room.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.Dao
-import com.example.pokemon_doisdedin.services.repository.local.room.PokemonEntity
-import com.example.pokemon_doisdedin.services.repository.local.room.entity.PokemonResultModel
+
+import com.example.pokemon_doisdedin.services.model.PokemonResultModel
 
 @Dao
 interface PokemonDAO {

@@ -2,6 +2,7 @@ package com.example.pokemon_doisdedin.services.koin
 
 import androidx.room.Room
 import com.example.pokemon_doisdedin.services.auxiliares.ValidationTime
+import com.example.pokemon_doisdedin.services.constants.Constants
 import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepositoryLocal
 import com.example.pokemon_doisdedin.services.repository.local.room.dao.PokemonsDataBase
 import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListenerImp
@@ -11,29 +12,24 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 object myModule {
-    val modules = module {
+    private val modules = module {
         viewModel {
             MainActivityViewModel(
-                application = get(),
                 dataBase = get(),
                 dataStore = get(),
                 validation = get()
             )
         }
-
         factory { ValidationTime(get()) }
         single { DataStoreRepositoryLocal(get()) }
         single { get<PokemonsDataBase>().pokemonDao() }
         single {
-            Room.databaseBuilder(get(), PokemonsDataBase::class.java, "pokemons_db")
+            Room.databaseBuilder(get(), PokemonsDataBase::class.java, Constants.DATA_BASE.NAME_DATA_BASE)
                 .fallbackToDestructiveMigration().build()
         }
     }
-
-    val modules1 = module {
-
+   private val modules1 = module {
         factory { RecyclerPokemonAdapter(RecyclerPokemonListenerImp()) }
     }
-
     val appComponent = listOf(modules, modules1)
 }

@@ -3,12 +3,9 @@ package com.example.pokemon_doisdedin.services.auxiliares
 
 import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepositoryLocal
 
-private const val ABOUT_TEXT_KEY = "ABOUT_TEXT_KEY"
-private const val ABOUT_TEXT_CACHE_TIME = "ABOUT_TEXT_CACHE_TIME"
 private const val TIME_CACHE_VALID = 86400000L // 60 * 60 * 24 * 1000
-private const val TIME_CACHE_1_MIN = 60000L //
 
-class ValidationTime(var dataStore: DataStoreRepositoryLocal) {
+class ValidationTime(private var dataStore: DataStoreRepositoryLocal) {
 
     suspend fun cacheIsValid(currentTime: Long): Int {
         val oldTime = dataStore.readTime()

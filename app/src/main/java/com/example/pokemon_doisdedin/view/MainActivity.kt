@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.pokemon_doisdedin.R
-import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
 import com.example.pokemon_doisdedin.view.viewadapter.RecyclerPokemonAdapter
 import com.example.pokemon_doisdedin.viewmodel.MainActivityViewModel
 import org.koin.android.ext.android.inject
@@ -21,10 +20,10 @@ class MainActivity : AppCompatActivity() {
 
     private val mViewModel: MainActivityViewModel by viewModel()
     private val mRecyclerPokemonAdapter: RecyclerPokemonAdapter by inject()
-    var lottieRecycler: LottieAnimationView? = null
-    var recyler_pokemons: RecyclerView? = null
-    var grid_layout_manager: GridLayoutManager? = null
-    var search_pokemon: SearchView? = null
+    private var lottieRecycler: LottieAnimationView? = null
+    private var recyler_pokemons: RecyclerView? = null
+    private var grid_layout_manager: GridLayoutManager? = null
+    private var search_pokemon: SearchView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -51,8 +50,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        mViewModel.mListPokemon.observe(this, Observer {
-            var x = it.size
+        mViewModel.mListPokemon.observe(this, {
             recyler_pokemons?.adapter = mRecyclerPokemonAdapter
             mRecyclerPokemonAdapter.setList(it)
             if (it.size != 0 && it !=null ){
@@ -60,11 +58,11 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-        mViewModel.mKeepLoad.observe(this, Observer {
+        mViewModel.mKeepLoad.observe(this, {
             setLayout(it)
 
         })
-        mViewModel.mWhereData.observe(this, Observer {
+        mViewModel.mWhereData.observe(this, {
             when (it) {
                 0 -> {
                     Toast.makeText(applicationContext, "null local data", Toast.LENGTH_SHORT)
