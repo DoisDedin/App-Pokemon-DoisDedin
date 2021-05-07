@@ -27,5 +27,7 @@ class RecyclerPokemonAdapter(
     fun setList(list: List<PokemonResultModel>) {
         list.also { mListPokemon = it }
     }
-
+    fun addAdapterToPokemon(idPokemon: Int){
+        mListener
+    }
 }

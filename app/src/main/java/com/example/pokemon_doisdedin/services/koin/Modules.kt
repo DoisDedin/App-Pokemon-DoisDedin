@@ -8,6 +8,7 @@ import com.example.pokemon_doisdedin.services.repository.local.room.dao.Pokemons
 import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListenerImp
 import com.example.pokemon_doisdedin.view.viewadapter.RecyclerPokemonAdapter
 import com.example.pokemon_doisdedin.viewmodel.MainActivityViewModel
+import com.example.pokemon_doisdedin.viewmodel.PokemonViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -18,6 +19,12 @@ object myModule {
                 dataBase = get(),
                 dataStore = get(),
                 validation = get()
+            )
+
+        }
+        viewModel {
+            PokemonViewModel(
+                application = get()
             )
         }
         factory { ValidationTime(get()) }

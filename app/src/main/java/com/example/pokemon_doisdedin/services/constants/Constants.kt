@@ -11,4 +11,7 @@ class Constants private constructor() {
     object DATA_BASE{
         const val NAME_DATA_BASE = "pokemons_db"
     }
+    object BUNDLE{
+        const val ID = "id"
+    }
 }

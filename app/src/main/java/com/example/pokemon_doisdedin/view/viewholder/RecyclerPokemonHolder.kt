@@ -37,7 +37,7 @@ class RecyclerPokemonHolder(view: View) : RecyclerView.ViewHolder(view) {
                 }
             })
         name_pokemon.setOnClickListener {
-            listener.onClick(1)
+            pokemon.id?.let { it1 -> listener.onClick(it1) }
         }
     }
 
