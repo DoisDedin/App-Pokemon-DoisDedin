@@ -7,13 +7,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.pokemon_doisdedin.R
-import com.example.pokemon_doisdedin.view.listener.RecyclerPokemonListener
 import com.example.pokemon_doisdedin.view.viewadapter.RecyclerPokemonAdapter
 import com.example.pokemon_doisdedin.viewmodel.MainActivityViewModel
 import kotlinx.coroutines.*
@@ -25,12 +25,12 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val mViewModel: MainActivityViewModel by viewModel<MainActivityViewModel>()
+    private val mViewModel: MainActivityViewModel by viewModel()
     private val mRecyclerPokemonAdapter: RecyclerPokemonAdapter by inject()
-    var lottieRecycler: LottieAnimationView? = null
-    var recyler_pokemons: RecyclerView? = null
-    var grid_layout_manager: GridLayoutManager? = null
-    var search_pokemon: SearchView? = null
+    private var lottieRecycler: LottieAnimationView? = null
+    private var recyler_pokemons: RecyclerView? = null
+    private var grid_layout_manager: GridLayoutManager? = null
+    private var search_pokemon: SearchView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,49 +45,48 @@ class MainActivity : AppCompatActivity() {
         observeViewModel()
         observeSearchView()
 
-
+      //  Toast.makeText(applicationContext, "onCreate", Toast.LENGTH_SHORT).show()
 
     }
 
     override fun onResume() {
         super.onResume()
-
+      //  Toast.makeText(applicationContext, "onResume", Toast.LENGTH_SHORT).show()
         mViewModel.loadPokemons()
-        Toast.makeText(this, "resume", Toast.LENGTH_LONG).show()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        setLayout(false)
-        Toast.makeText(this, "pause", Toast.LENGTH_LONG).show()
-
 
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Toast.makeText(this, "destroy", Toast.LENGTH_LONG).show()
-    }
-
 
     private fun observeViewModel() {
-        mViewModel.mListPokemon.observe(this, Observer {
+        mViewModel.mListPokemon.observe(this, {
             recyler_pokemons?.adapter = mRecyclerPokemonAdapter
             mRecyclerPokemonAdapter.setList(it)
+            if (it.size != 0 && it !=null ){
+                mViewModel.loadSuccess()
+            }
 
         })
-        mViewModel.mKeepLoad.observe(this, Observer {
-            if (it == false) {
-                setLayout(false)
-            }else {
-                setLayout(true)
-            }
+        mViewModel.mKeepLoad.observe(this, {
+            setLayout(it)
+
         })
-        mViewModel.mLook.observe(this, Observer {
-            if (it == "local_data") {
-                Toast.makeText(this, "local data", Toast.LENGTH_LONG).show()
-            } else if (it == "remote_data") {
-                Toast.makeText(this, "remote data", Toast.LENGTH_LONG).show()
+        mViewModel.mWhereData.observe(this, {
+            when (it) {
+                0 -> {
+                    Toast.makeText(applicationContext, "null local data", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                1 -> {
+                    Toast.makeText(applicationContext, "invalid local data", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                2->{
+                    Toast.makeText(applicationContext, "local data valid", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                else -> {
+                    Toast.makeText(applicationContext, "null", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         })
     }
@@ -111,7 +110,7 @@ class MainActivity : AppCompatActivity() {
             recyler_pokemons?.visibility = View.VISIBLE
             search_pokemon?.visibility = View.VISIBLE
             lottieRecycler?.visibility = View.GONE
-        } else {
+        }else {
             recyler_pokemons?.visibility = View.GONE
             search_pokemon?.visibility = View.GONE
             lottieRecycler?.visibility = View.VISIBLE

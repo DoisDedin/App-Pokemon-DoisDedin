@@ -4,12 +4,14 @@ package com.example.pokemon_doisdedin.viewmodel
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.*
+import com.example.pokemon_doisdedin.services.auxiliares.ValidationTime
 import com.example.pokemon_doisdedin.services.auxiliares.ValidacaoTempo
 
 import com.example.pokemon_doisdedin.services.constants.Constants
 import com.example.pokemon_doisdedin.services.listener.APIListener
-import com.example.pokemon_doisdedin.services.repository.local.room.entity.PokemonResultModel
+import com.example.pokemon_doisdedin.services.model.PokemonResultModel
 import com.example.pokemon_doisdedin.services.repository.PokemonRepository
+import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepositoryLocal
 import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepository
 import com.example.pokemon_doisdedin.services.repository.local.room.dao.PokemonsDataBase
 import kotlinx.coroutines.*
@@ -22,81 +24,82 @@ import okhttp3.Dispatcher
 
 
 class MainActivityViewModel(
-    var application: Application,
     var dataBase: PokemonsDataBase,
-    var dataStore: DataStoreRepository,
-    var validation: ValidacaoTempo
+    var dataStore: DataStoreRepositoryLocal,
+    var validation: ValidationTime
 ) : ViewModel() {
     private val baseUrl: String = Constants.LINK.POKEMOMIMAGE
-    var mLook = MutableLiveData<String>()
     var mListPokemon = MutableLiveData<ArrayList<PokemonResultModel>>()
     var mListPokemonFilter: ArrayList<PokemonResultModel> = arrayListOf()
-    var mListAux: List<PokemonResultModel> = arrayListOf()
     var mKeepLoad = MutableLiveData<Boolean>()
-    var mSearchViewNull = MutableLiveData<Boolean>()
     var mPokemonRepository = PokemonRepository()
-    var mErro: String = ""
+    var mWhereData = MutableLiveData<Int>()
 
-    //banco de dados auxiliares
     //carregar a lista de pokemons ( se haver local pega localmente) (se não pega remotamente)
     fun loadPokemons() {
-
         mKeepLoad.value = true
-        var currentTime = System.currentTimeMillis()
+        val currentTime = System.currentTimeMillis()
         GlobalScope.launch(Dispatchers.IO) {
-            withContext(Dispatchers.IO) {
-                if (dataBaseIsValid(currentTime)) {
+            mWhereData.postValue(validation.cacheIsValid(currentTime))
+            when (mWhereData.value) {
+                2 -> {
                     mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
-
                     mKeepLoad.postValue(false)
-                    mLook.postValue("local_data")
-
-                } else {
-                    dataStore.storeTime(currentTime)
-                    getPokemon()
-                    mLook.postValue("remote_data")
-
+                }
+                else -> {
+                    dataBase.pokemonDao().deleteAllPokemons()
+                    getPokemonApi()
                 }
             }
         }
     }
 
+    fun loadSuccess() {
+        mKeepLoad.value = false
+    }
+
     //coletando os dados da api / inserindo eles no Room
-    suspend fun getPokemon() {
-        getPokemonsApi(Constants.VALUES.SIZE).catch {
+   private fun getPokemonApi() {
+        GlobalScope.launch(Dispatchers.IO) {
+            getPokemons(Constants.VALUES.SIZE).catch {
 
-        }.collect {
-            //inserindo os pokemons dentro do banco de dados
-            mListPokemon.postValue(it)
-            dataBase.pokemonDao().addListPokemon(it)
+            }.collect {
+                //inserindo os pokemons dentro do banco de dados
+                mListPokemon.postValue(it)
+                dataBase.pokemonDao().addListPokemon(it)
+                dataStore.storeTime(System.currentTimeMillis())
+            }
         }
-
     }
 
     //obtendo pokemons da api
-    fun getPokemonsApi(size: Int): Flow<ArrayList<PokemonResultModel>> {
-        var defaultPokemon = PokemonResultModel()
-        var sendPokemon = ArrayList<PokemonResultModel>()
-        GlobalScope.launch(Dispatchers.IO) {
-            delay(4000)
-            mKeepLoad.postValue(false)
-        }
-        return flow<ArrayList<PokemonResultModel>> {
-            for (x in 1..size) {
-                mPokemonRepository.pokemon(x.toString(), object : APIListener<PokemonResultModel> {
-                    override fun onSuccess(mode: PokemonResultModel) {
-                        mode.image = "$baseUrl${mode.id.toString()}.png"
-                        sendPokemon.add(mode)
-                    }
+    private fun getPokemons(sizePokemon: Int): Flow<ArrayList<PokemonResultModel>> {
+        val defaultPokemon = PokemonResultModel()
+        val sendPokemon = ArrayList<PokemonResultModel>()
 
-                    override fun onFailure(str: String) {
-                        mErro = "ApiErro"
-                        defaultPokemon.id = x
-                        sendPokemon.add(defaultPokemon)
-                    }
-                })
+        return flow {
+            for (x in 1..sizePokemon) {
+                mPokemonRepository.pokemon(
+                    x.toString(),
+                    object : APIListener<PokemonResultModel> {
+                        override suspend fun onSuccess(mode: PokemonResultModel) {
+                            mode.image = "$baseUrl${mode.id.toString()}.png"
+                            sendPokemon.add(mode)
+                            if (sendPokemon.size == sizePokemon) {
+                                emit(sendPokemon)
+                            }
+
+                        }
+
+                        override suspend fun onFailure(str: String) {
+                            defaultPokemon.id = x
+                            sendPokemon.add(defaultPokemon)
+                            if (sendPokemon.size == sizePokemon) {
+                                emit(sendPokemon)
+                            }
+                        }
+                    })
             }
-            emit(sendPokemon)
         }
     }
 
@@ -114,11 +117,6 @@ class MainActivityViewModel(
                 mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
             }
         }
-    }
-
-    //fazer validação se o banco de dados do aplicativo esta  obsoleto
-    suspend fun dataBaseIsValid(currentTime: Long): Boolean {
-        return false//validation.cacheIsValid(currentTime)
     }
 
 }
