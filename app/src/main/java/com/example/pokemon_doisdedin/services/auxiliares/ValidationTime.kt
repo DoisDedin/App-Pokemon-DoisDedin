@@ -11,12 +11,11 @@ private const val TIME_CACHE_1_MIN = 60000L //
 class ValidationTime(var dataStore: DataStoreRepositoryLocal) {
 
     suspend fun cacheIsValid(currentTime: Long): Int {
-        var oldTime = dataStore.readTime()
+        val oldTime = dataStore.readTime()
         if (oldTime == null) {
-            var s = ""
             return 0 //not local database
         } else {
-            var result = currentTime - oldTime
+            val result = currentTime - oldTime
             if (result > TIME_CACHE_VALID) {
                 return 1 // local database and is invalid
             } else {

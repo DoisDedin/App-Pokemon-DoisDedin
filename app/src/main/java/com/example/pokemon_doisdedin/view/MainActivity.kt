@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         grid_layout_manager = GridLayoutManager(this, 2)
         recyler_pokemons?.layoutManager = grid_layout_manager
 
+
         observeViewModel()
         observeSearchView()
 
@@ -54,14 +55,10 @@ class MainActivity : AppCompatActivity() {
             var x = it.size
             recyler_pokemons?.adapter = mRecyclerPokemonAdapter
             mRecyclerPokemonAdapter.setList(it)
-
-        })
-        mViewModel.mListPokemonDataBase.observe(this, Observer {
-            if (it.size != 0) {
-                mViewModel.tradeMemory()
-              //  Toast.makeText(applicationContext, "memory it.size", Toast.LENGTH_SHORT).show()
+            if (it.size != 0 && it !=null ){
+                mViewModel.loadSuccess()
             }
-           // Toast.makeText(applicationContext, "memory 0", Toast.LENGTH_SHORT).show()
+
         })
         mViewModel.mKeepLoad.observe(this, Observer {
             setLayout(it)

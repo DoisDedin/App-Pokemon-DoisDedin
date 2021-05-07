@@ -27,7 +27,7 @@ class MainActivityViewModel(
 ) : ViewModel() {
     private val baseUrl: String = Constants.LINK.POKEMOMIMAGE
     var mListPokemon = MutableLiveData<ArrayList<PokemonResultModel>>()
-    var mListPokemonDataBase = MutableLiveData<ArrayList<PokemonResultModel>>()
+  //  var mListPokemonDataBase = MutableLiveData<ArrayList<PokemonResultModel>>()
     var mListPokemonFilter: ArrayList<PokemonResultModel> = arrayListOf()
     var mListAux: List<PokemonResultModel> = arrayListOf()
     var mKeepLoad = MutableLiveData<Boolean>()
@@ -38,11 +38,12 @@ class MainActivityViewModel(
 
     //carregar a lista de pokemons ( se haver local pega localmente) (se não pega remotamente)
     fun loadPokemons() {
+        mKeepLoad.value = true
         GlobalScope.launch(Dispatchers.IO) {
             mWhereData.postValue(dataBaseIsValid(System.currentTimeMillis())!!)
             when (mWhereData.value) {
                 2 -> {
-                    mListPokemonDataBase.postValue(ArrayList(dataBase.pokemonDao().getAll()))
+                    mListPokemon.postValue(ArrayList(dataBase.pokemonDao().getAll()))
                     mKeepLoad.postValue(false)
                 }
                 else -> {
@@ -53,7 +54,9 @@ class MainActivityViewModel(
             }
         }
     }
-
+    fun loadSuccess(){
+        mKeepLoad.value = false
+    }
     //coletando os dados da api / inserindo eles no Room
     fun getPokemonApi() {
         GlobalScope.launch(Dispatchers.IO) {
@@ -61,27 +64,18 @@ class MainActivityViewModel(
 
             }.collect {
                 //inserindo os pokemons dentro do banco de dados
-                mListPokemonDataBase.postValue(it)
+                mListPokemon.postValue(it)
                 dataBase.pokemonDao().addListPokemon(it)
                 dataStore.storeTime(System.currentTimeMillis())
             }
         }
     }
 
-    fun tradeMemory() {
-        mListPokemon.value = mListPokemonDataBase.value
-        var s = ""
-
-    }
-
     //obtendo pokemons da api
     fun getPokemons(size: Int): Flow<ArrayList<PokemonResultModel>> {
         var defaultPokemon = PokemonResultModel()
         var sendPokemon = ArrayList<PokemonResultModel>()
-        GlobalScope.launch(Dispatchers.IO) {
-            delay(8000)
-            mKeepLoad.postValue(false)
-        }
+
         return flow<ArrayList<PokemonResultModel>> {
             for (x in 1..size) {
                 mPokemonRepository.pokemon(
