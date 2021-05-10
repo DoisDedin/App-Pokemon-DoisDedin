@@ -23,6 +23,7 @@ class RecyclerPokemonHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val image_pokemon: ImageView = view.findViewById(R.id.image_pokemon)
     private val lottie: LottieAnimationView = view.findViewById(R.id.lottie)
     private val background: ConstraintLayout = view.findViewById(R.id.background_gambiarra)
+    private val mView : View = view
     fun bind(pokemon: PokemonResultModel, listener: RecyclerPokemonListenerImp) {
         setLayout(0)
         name_pokemon.text = pokemon.name
@@ -36,8 +37,8 @@ class RecyclerPokemonHolder(view: View) : RecyclerView.ViewHolder(view) {
                 override fun onError(e: Exception?) {
                 }
             })
-        name_pokemon.setOnClickListener {
-            pokemon.id?.let { it1 -> listener.onClick(it1) }
+        image_pokemon.setOnClickListener {
+            pokemon.id?.let { it1 -> listener.onClick(it1,mView) }
         }
     }
 
