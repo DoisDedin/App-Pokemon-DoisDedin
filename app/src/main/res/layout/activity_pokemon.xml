@@ -52,6 +52,7 @@
     <ProgressBar
         android:id="@+id/demage_bar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:progressDrawable="@drawable/custom_progressbar_damage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -82,6 +83,7 @@
     <ProgressBar
         android:id="@+id/defense_bar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:progressDrawable="@drawable/custom_progressbar_defense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -112,6 +114,7 @@
     <ProgressBar
         android:id="@+id/life_bar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:progressDrawable="@drawable/custom_progressbar_life"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -142,6 +145,7 @@
     <ProgressBar
         android:id="@+id/height_bar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:progressDrawable="@drawable/custom_progressbar_height"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -172,6 +176,7 @@
     <ProgressBar
         android:id="@+id/weight_bar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:progressDrawable="@drawable/custom_progressbar_weight"
         android:layout_width="match_parent"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
@@ -202,6 +207,7 @@
     <ProgressBar
         android:id="@+id/base_xp_bar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:progressDrawable="@drawable/custom_progressbar_xp_base"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"

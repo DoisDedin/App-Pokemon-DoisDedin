@@ -3,7 +3,7 @@ package com.example.pokemon_doisdedin.services.constants
 class Constants private constructor() {
 
     object VALUES{
-        const val SIZE = 100
+        const val SIZE = 50
     }
     object LINK{
         const val POKEMOMIMAGE = "https://pokeres.bastionbot.org/images/pokemon/"

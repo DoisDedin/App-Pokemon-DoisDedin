@@ -12,7 +12,7 @@ interface PokemonDAO {
     suspend fun addListPokemon(entities:List<PokemonResultModel>)
     @Query("SELECT * FROM pokemon")
     fun getAll(): List<PokemonResultModel>
-    @Query("DELETE FROM  pokemon")
+    @Query("DELETE FROM pokemon")
     suspend fun deleteAllPokemons()
     @Query("SELECT * FROM pokemon WHERE id in (:id)")
     fun getpokemon(id: String): PokemonResultModel

@@ -4,28 +4,25 @@ package com.example.pokemon_doisdedin.view
 import android.animation.ObjectAnimator
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.palette.graphics.Palette
 import com.airbnb.lottie.LottieAnimationView
 import com.example.pokemon_doisdedin.R
 import com.example.pokemon_doisdedin.services.constants.Constants
-import com.example.pokemon_doisdedin.services.model.PokemonResultModel
 import com.example.pokemon_doisdedin.viewmodel.PokemonViewModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.Exception
 import java.util.*
-import kotlin.collections.RandomAccess
 
 
 class PokemonActivity : AppCompatActivity(), View.OnClickListener {
@@ -86,8 +83,8 @@ class PokemonActivity : AppCompatActivity(), View.OnClickListener {
         txtDemagePokemon = findViewById(R.id.demage_int)
         txtDefensePokemon = findViewById(R.id.defense_int)
         txtLifePokemon = findViewById(R.id.life_int)
-        txtHeightPokemon = findViewById(R.id.weight_int)
-        txtWeightPokemon = findViewById(R.id.height_int)
+        txtHeightPokemon = findViewById(R.id.height_int)
+        txtWeightPokemon = findViewById(R.id.weight_int)
         txtBaseXpPokemon = findViewById(R.id.base_xp_int)
 
         //progessBars
@@ -126,10 +123,17 @@ class PokemonActivity : AppCompatActivity(), View.OnClickListener {
         txtLifePokemon?.text = life.toString()
         progressAnimator(progressLifePokemon,life)
 
+        val height = mViewModel.mPokemon.value?.height.toString()
+        txtHeightPokemon?.text = height
+        progressAnimator(progressHeightPokemon,height.toInt())
 
-        txtHeightPokemon?.text = mViewModel.mPokemon.value?.height.toString()
-        txtWeightPokemon?.text = mViewModel.mPokemon.value?.weight.toString()
-        txtBaseXpPokemon?.text = mViewModel.mPokemon.value?.base_experience.toString()
+        val weight = mViewModel.mPokemon.value?.weight.toString()
+        txtWeightPokemon?.text = weight
+        progressAnimator(progressWeightPokemon,weight.toInt())
+
+        val basexp =  mViewModel.mPokemon.value?.base_experience.toString()
+        txtBaseXpPokemon?.text =basexp
+        progressAnimator(progressBaseXpPokemon,basexp.toInt())
     }
 
     private fun rand(from: Int, to: Int): Int {
