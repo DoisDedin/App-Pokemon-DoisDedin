@@ -24,7 +24,8 @@ object myModule {
         }
         viewModel {
             PokemonViewModel(
-                application = get()
+                application = get(),
+                dataBase = get()
             )
         }
         factory { ValidationTime(get()) }
