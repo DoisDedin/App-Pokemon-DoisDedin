@@ -18,7 +18,9 @@ import androidx.palette.graphics.Palette
 import com.airbnb.lottie.LottieAnimationView
 import com.example.pokemon_doisdedin.R
 import com.example.pokemon_doisdedin.services.constants.Constants
+import com.example.pokemon_doisdedin.services.model.PokemonResultModel
 import com.example.pokemon_doisdedin.viewmodel.PokemonViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,6 +31,7 @@ class PokemonActivity : AppCompatActivity(), View.OnClickListener {
 
     private val mViewModel: PokemonViewModel by viewModel()
 
+    private var fab: FloatingActionButton? = null
     private var imagePokemon: ImageView? = null
     private var txtNamePokemon: TextView? = null
     private var txtPhrase: TextView? = null
@@ -54,6 +57,7 @@ class PokemonActivity : AppCompatActivity(), View.OnClickListener {
         var idPokemon = bundle?.get(Constants.BUNDLE.ID)
 
         bindLayout()
+        setListeners()
         observeViewModel()
 
         getPokemonViewModel(idPokemon.toString())
@@ -61,23 +65,34 @@ class PokemonActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        if (v?.id == R.id.floating_action_button) {
+            finish()
+        }
+    }
 
+    private fun setListeners() {
+        fab?.setOnClickListener(this)
     }
 
     private fun observeViewModel() {
         mViewModel.mPokemon.observe(this, {
-            setValuesLayout()
+            setValuesLayout(it)
         })
     }
-    private fun getPokemonViewModel(id:String){
+
+    private fun getPokemonViewModel(id: String) {
         mViewModel.getPokemon(id)
     }
+
     fun bindLayout() {
         //basic layouts
         background = findViewById(R.id.background_gambiarra)
         lottie = findViewById(R.id.lottie)
-        //texts
         imagePokemon = findViewById(R.id.image_pokemon)
+
+        //floating actioon button
+        fab = findViewById(R.id.floating_action_button)
+        //texts
         txtNamePokemon = findViewById(R.id.name_pokemon)
         txtPhrase = findViewById(R.id.frasepokemon)
         txtDemagePokemon = findViewById(R.id.demage_int)
@@ -98,11 +113,11 @@ class PokemonActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    fun setValuesLayout() {
-        txtNamePokemon?.text = mViewModel.mPokemon.value?.name
-        txtPhrase?.text = " esse é o ${mViewModel.mPokemon.value?.name}"
-
-        Picasso.get().load(mViewModel.mPokemon.value?.image)
+    fun setValuesLayout(pokemon: PokemonResultModel) {
+        txtNamePokemon?.text = pokemon.name
+        txtPhrase?.text = " esse é o ${pokemon.name}"
+        setLayout(0)
+        Picasso.get().load(pokemon.image)
             .into(imagePokemon, object : Callback {
                 override fun onSuccess() {
                     loadPalette()
@@ -114,27 +129,27 @@ class PokemonActivity : AppCompatActivity(), View.OnClickListener {
             })
         val demage = rand(0, 1000)
         txtDemagePokemon?.text = "${demage} ATK"
-        progressAnimator(progressDemagePokemon,demage)
+        progressAnimator(progressDemagePokemon, demage)
 
         val defense = rand(0, 1000)
         txtDefensePokemon?.text = "${defense} DEF"
-        progressAnimator(progressDefensePokemon,defense)
+        progressAnimator(progressDefensePokemon, defense)
 
         val life = rand(0, 1000)
         txtLifePokemon?.text = "${life} HP"
-        progressAnimator(progressLifePokemon,life)
+        progressAnimator(progressLifePokemon, life)
 
-        val height = mViewModel.mPokemon.value?.height.toString()+"0"
+        val height = pokemon.height.toString() + "0"
         txtHeightPokemon?.text = "${height} Cm"
-        progressAnimator(progressHeightPokemon,height.toInt())
+        progressAnimator(progressHeightPokemon, height.toInt())
 
-        val weight = mViewModel.mPokemon.value?.weight.toString()
+        val weight = pokemon.weight.toString()
         txtWeightPokemon?.text = "${weight} Kg"
-        progressAnimator(progressWeightPokemon,weight.toInt())
+        progressAnimator(progressWeightPokemon, weight.toInt())
 
-        val basexp =  mViewModel.mPokemon.value?.base_experience.toString()
-        txtBaseXpPokemon?.text ="${basexp} Xp"
-        progressAnimator(progressBaseXpPokemon,basexp.toInt())
+        val basexp = pokemon.base_experience.toString()
+        txtBaseXpPokemon?.text = "${basexp} Xp"
+        progressAnimator(progressBaseXpPokemon, basexp.toInt())
     }
 
     private fun rand(from: Int, to: Int): Int {
