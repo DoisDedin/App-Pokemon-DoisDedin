@@ -106,33 +106,34 @@ class PokemonActivity : AppCompatActivity(), View.OnClickListener {
             .into(imagePokemon, object : Callback {
                 override fun onSuccess() {
                     loadPalette()
+                    var s = ""
                 }
 
                 override fun onError(e: Exception?) {
                 }
             })
         val demage = rand(0, 1000)
-        txtDemagePokemon?.text = demage.toString()
+        txtDemagePokemon?.text = "${demage} ATK"
         progressAnimator(progressDemagePokemon,demage)
 
         val defense = rand(0, 1000)
-        txtDefensePokemon?.text = defense.toString()
+        txtDefensePokemon?.text = "${defense} DEF"
         progressAnimator(progressDefensePokemon,defense)
 
         val life = rand(0, 1000)
-        txtLifePokemon?.text = life.toString()
+        txtLifePokemon?.text = "${life} HP"
         progressAnimator(progressLifePokemon,life)
 
-        val height = mViewModel.mPokemon.value?.height.toString()
-        txtHeightPokemon?.text = height
+        val height = mViewModel.mPokemon.value?.height.toString()+"0"
+        txtHeightPokemon?.text = "${height} Cm"
         progressAnimator(progressHeightPokemon,height.toInt())
 
         val weight = mViewModel.mPokemon.value?.weight.toString()
-        txtWeightPokemon?.text = weight
+        txtWeightPokemon?.text = "${weight} Kg"
         progressAnimator(progressWeightPokemon,weight.toInt())
 
         val basexp =  mViewModel.mPokemon.value?.base_experience.toString()
-        txtBaseXpPokemon?.text =basexp
+        txtBaseXpPokemon?.text ="${basexp} Xp"
         progressAnimator(progressBaseXpPokemon,basexp.toInt())
     }
 
