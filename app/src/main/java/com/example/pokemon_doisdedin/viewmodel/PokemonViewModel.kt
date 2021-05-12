@@ -1,7 +1,6 @@
 package com.example.pokemon_doisdedin.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pokemon_doisdedin.services.model.PokemonResultModel

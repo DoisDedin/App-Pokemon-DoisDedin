@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/background_gambiarra"
     android:background="@drawable/shape_pokemon"
     android:backgroundTint="@color/second_background_app"
@@ -55,7 +54,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/image" />
 
     <TextView
         android:id="@+id/name_pokemon"
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:visibility="gone"
-        android:text="test"
+        android:text="@string/test"
         android:textAllCaps="true"
         android:textColor="@color/greyreads"
         android:textSize="12sp"

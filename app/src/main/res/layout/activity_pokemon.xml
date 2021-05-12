@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="O mundo todo em uma flecha."
+        android:text="@string/o_mundo_todo_em_uma_flecha"
         android:textSize="20sp"
 
         app:layout_constraintLeft_toLeftOf="@id/guidelineStartInfo"
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="DEMAGE"
+        android:text="@string/damage"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="@id/guidelineStartInfo"
         app:layout_constraintTop_toBottomOf="@id/frasepokemon" />
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="DEMAGE"
+        android:text="@string/damage"
         android:textSize="20sp"
         app:layout_constraintRight_toRightOf="@id/guidelineEndInfo"
         app:layout_constraintTop_toBottomOf="@id/frasepokemon" />
@@ -68,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="DEFENSE"
+        android:text="@string/defense"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="@id/guidelineStartInfo"
         app:layout_constraintTop_toBottomOf="@id/demage_bar" />
@@ -78,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="DEFENSE"
+        android:text="@string/defense"
         android:textSize="20sp"
         app:layout_constraintRight_toRightOf="@id/guidelineEndInfo"
         app:layout_constraintTop_toBottomOf="@id/demage_bar" />
@@ -101,7 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="LIFE"
+        android:text="@string/life"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="@id/guidelineStartInfo"
         app:layout_constraintTop_toBottomOf="@id/defense_bar" />
@@ -111,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="LIFE"
+        android:text="@string/life"
         android:textSize="20sp"
         app:layout_constraintRight_toRightOf="@id/guidelineEndInfo"
         app:layout_constraintTop_toBottomOf="@id/defense_bar" />
@@ -134,7 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="HEIGHT"
+        android:text="@string/height"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="@id/guidelineStartInfo"
         app:layout_constraintTop_toBottomOf="@id/life_bar" />
@@ -144,7 +144,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="HEIGHT"
+        android:text="@string/height"
         android:textSize="20sp"
         app:layout_constraintRight_toRightOf="@id/guidelineEndInfo"
         app:layout_constraintTop_toBottomOf="@id/life_bar" />
@@ -168,7 +168,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="WEIGHT"
+        android:text="@string/weight"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="@id/guidelineStartInfo"
         app:layout_constraintTop_toBottomOf="@id/height_bar" />
@@ -178,7 +178,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="WEIGHT"
+        android:text="@string/weight"
         android:textSize="20sp"
         app:layout_constraintRight_toRightOf="@id/guidelineEndInfo"
         app:layout_constraintTop_toBottomOf="@id/height_bar" />
@@ -201,7 +201,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="BASE XP"
+        android:text="@string/base_xp"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="@id/guidelineStartInfo"
         app:layout_constraintTop_toBottomOf="@id/weight_bar" />
@@ -211,7 +211,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="BASE XP"
+        android:text="@string/base_xp"
         android:textSize="20sp"
         app:layout_constraintRight_toRightOf="@id/guidelineEndInfo"
         app:layout_constraintTop_toBottomOf="@id/weight_bar" />
@@ -239,7 +239,8 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_baseline_arrow_back_24"
        android:backgroundTint="@color/gold_main"
-        tools:ignore="RtlHardcoded" />
+        tools:ignore="RtlHardcoded"
+        android:contentDescription="@string/todo" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineStartInfo"
