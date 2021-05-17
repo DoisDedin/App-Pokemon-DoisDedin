@@ -2,7 +2,6 @@ package com.example.pokemon_doisdedin.view.listener
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.SyncStateContract
 import android.view.View
 import com.example.pokemon_doisdedin.services.constants.Constants
 import com.example.pokemon_doisdedin.view.PokemonActivity

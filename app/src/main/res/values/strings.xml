@@ -2,16 +2,10 @@
     <string name="app_name">Pokemon-DoisDedin</string>
     <string name="o_mundo_todo_em_uma_flecha">O mundo todo em uma flecha.</string>
     <string name="damage">DAMAGE</string>
-    <string name="damage">DAMAGE</string>
-    <string name="defense">DEFENSE</string>
     <string name="defense">DEFENSE</string>
     <string name="life">LIFE</string>
-    <string name="life">LIFE</string>
-    <string name="height">HEIGHT</string>
     <string name="height">HEIGHT</string>
     <string name="weight">WEIGHT</string>
-    <string name="weight">WEIGHT</string>
-    <string name="base_xp">BASE XP</string>
     <string name="base_xp">BASE XP</string>
     <string name="todo">TODO</string>
     <string name="test">test</string>
