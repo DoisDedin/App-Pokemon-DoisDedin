@@ -1,18 +1,19 @@
 package com.example.pokemon_doisdedin.services.auxiliares
 
 
-import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepositoryLocal
+import com.example.pokemon_doisdedin.services.repository.local.datastore.UserSettingsStore
+import com.example.pokemon_doisdedin.services.repository.local.datastore.UserSettingsStoreImp
 
 private const val TIME_CACHE_VALID = 86400000L // 60 * 60 * 24 * 1000
 
-class ValidationTime(private var dataStore: DataStoreRepositoryLocal) {
+class ValidationTime(private var dataStore: UserSettingsStore) {
 
     suspend fun cacheIsValid(currentTime: Long): Int {
         val oldTime = dataStore.readTime()
         if (oldTime == null) {
             return 0 //not local database
         } else {
-            val result = currentTime - oldTime
+            val result = (currentTime - oldTime)
             if (result > TIME_CACHE_VALID) {
                 return 1 // local database and is invalid
             } else {

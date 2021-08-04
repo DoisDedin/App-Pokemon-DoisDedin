@@ -6,7 +6,7 @@ import com.example.pokemon_doisdedin.services.auxiliares.ValidationTime
 import com.example.pokemon_doisdedin.services.constants.Constants
 import com.example.pokemon_doisdedin.services.listener.APIListener
 import com.example.pokemon_doisdedin.services.model.PokemonResultModel
-import com.example.pokemon_doisdedin.services.repository.PokemonRepository
+import com.example.pokemon_doisdedin.services.repository.PokemonRepositoryImp
 import com.example.pokemon_doisdedin.services.repository.local.datastore.DataStoreRepositoryLocal
 import com.example.pokemon_doisdedin.services.repository.local.room.dao.PokemonsDataBase
 import kotlinx.coroutines.*
@@ -25,7 +25,7 @@ class MainActivityViewModel(
     var mListPokemon = MutableLiveData<ArrayList<PokemonResultModel>>()
     var mListPokemonFilter: ArrayList<PokemonResultModel> = arrayListOf()
     var mKeepLoad = MutableLiveData<Boolean>()
-    var mPokemonRepository = PokemonRepository()
+    var mPokemonRepository = PokemonRepositoryImp()
     var mWhereData = MutableLiveData<Int>()
 
     //carregar a lista de pokemons ( se haver local pega localmente) (se não pega remotamente)

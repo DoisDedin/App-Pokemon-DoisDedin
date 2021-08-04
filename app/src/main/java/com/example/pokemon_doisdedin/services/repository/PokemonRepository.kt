@@ -1,38 +1,8 @@
 package com.example.pokemon_doisdedin.services.repository
 
-import com.example.pokemon_doisdedin.services.listener.APIListener
 import com.example.pokemon_doisdedin.services.model.PokemonResultModel
-import com.example.pokemon_doisdedin.services.repository.remoto.PokemonService
-import com.example.pokemon_doisdedin.services.repository.remoto.RetrofitPokemon
-import retrofit2.Response
+import kotlinx.coroutines.flow.Flow
 
-class PokemonRepository {
-    private val mRemote = RetrofitPokemon.createService(PokemonService::class.java)
-    suspend fun pokemon(id: String, listener: APIListener<PokemonResultModel>) {
-        val response: Response<PokemonResultModel> = mRemote.pokemon(id)
-//        call.(object : Callback<PokemonResultModel> {
-//            override suspend fun onResponse(
-//                call: Call<PokemonResultModel>,
-//                response: Response<PokemonResultModel>
-//            ) {
-//                if (response.code() != Constants.HTTP.SUCCESS) {
-//                    val validation =
-//                        Gson().fromJson(response.errorBody().toString(), String::class.java)
-//                    listener.onFailure(validation)
-//                } else {
-//                    response.body()?.let { listener.onSuccess(it) }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<PokemonResultModel>, t: Throwable) {
-//                listener.onFailure(t.message.toString())
-//            }
-//
-//        })
-        if (response.isSuccessful) {
-            response.body()?.let { listener.onSuccess(it) }
-        } else {
-            listener.onFailure(response.message())
-        }
-    }
+interface PokemonRepository {
+    suspend fun getPokemons() : Flow<ArrayList<PokemonResultModel>>
 }
